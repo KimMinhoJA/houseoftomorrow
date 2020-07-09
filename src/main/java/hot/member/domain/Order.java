@@ -11,17 +11,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "order")
+@Table(name = "[order]")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Order {
 	
 	@Id
@@ -37,20 +42,33 @@ public class Order {
 	@JoinColumn(name = "port_no")
 	private Portfolio Portfolio;
 	
-	@ManyToOne
-	@JoinColumn(name = "price_no")
-	private Price price;
-	
 	@Column(name = "order_regdate")
 	private Timestamp orderRegdate;
 	
 	@Column(name = "order_payment")
-	private int orderPayment;
+	private Integer orderPayment;
 	
 	@Column(name = "order_method")
 	private String orderMethod;
 	
 	@Column(name = "order_status")
-	private int oderStatus;
+	private Integer orderStatus;
+	
+	public String getOrderStatusName() {
+		if(this.getOrderStatus() == 0) {
+			System.out.println("**************ready**************");
+			return "ready";
+		} else if(this.getOrderStatus() == 1) {
+			System.out.println("**************paid**************");
+			return "paid";
+		} else if(this.getOrderStatus() == 2) {
+			System.out.println("**************cancelled**************");
+			return "cancelled";
+		} else if(this.getOrderStatus() == 3) {
+			System.out.println("**************failed**************");
+			return "failed";
+		}
+		return null;
+	}
 
 }
